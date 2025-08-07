@@ -20,4 +20,4 @@ We have expanded the backend by adding more custom fonts to the existing font ma
 
 ### Commits
 
-![Font Upload Endpoint](screenshots/commits.png)
+![Font Upload Endpoint](screenshots/commits.jpg)
