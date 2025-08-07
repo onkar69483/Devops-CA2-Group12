@@ -1,7 +1,4 @@
 # 🚀 DevOps-CA1
-
-A collaborative student project submission featuring routing improvements, UI responsiveness fixes, and performance upgrades for a modern React-based website.
-
 ---
 
 ## 📌 Overview
