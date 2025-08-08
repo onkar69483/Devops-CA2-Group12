@@ -4,7 +4,7 @@
 - **Janmejay Pandya - 22070122086** (TH1)
 - **Sachin Mhetre - 22070122119** (TH1)
 - **Mihir Hebalkar - 22070122120** (TH1)
-- **Onkar Mendhapurka - 22070122135** (TH2)
+- **Onkar Mendhapurkar - 22070122135** (TH2)
 
 ---
 
