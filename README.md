@@ -3,7 +3,7 @@
 ## How to run the project
   1. In CMD: python -m http.server 8000
   2. On Browser: http://localhost:8000/index.html
-## 📌 Challenge Statement
+## Challenge Statement
 This project addresses a common **"Base Currency Assumption"** bug in currency converters.
 
 **Reference Source:** [ExchangeRate API – Pair Conversion Requests](https://www.exchangerate-api.com/docs/pair-conversion-requests)
