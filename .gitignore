@@ -1,1 +1,10 @@
 venv/
+# Data files
+*.csv
+*.json
+*.xlsx
+*.parquet
+*.pkl
+*.pickle
+data/
+datasets/
