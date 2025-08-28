@@ -1,0 +1,25 @@
+
+- Added proper string formatting using values from the container’s environment.
+
+---
+
+## 🔗 Solution Tech Stack
+
+- **Language**: Java  
+- **Database**: PostgreSQL  
+- **Framework**: Testcontainers (R2DBC)
+
+---
+
+## 🧪 Tested & Verified
+
+- Verified the connection string works with R2DBC PostgreSQL client
+- Tested container behavior using unit tests inside `PostgreSQLContainerTest.java`
+
+---
+
+## 🔁 PR Reference
+
+Original fix created based on this PR:  
+[https://github.com/testcontainers/testcontainers-java/pull/10586](https://github.com/testcontainers/testcontainers-java/pull/10586)
+
