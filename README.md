@@ -13,9 +13,6 @@ This repository contains the solution for the **Store Sales - Time Series Foreca
 - [Modeling Approach](#modeling-approach)
 - [Results](#results)
 - [DevOps Practices](#devops-practices)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
