@@ -1,3 +1,4 @@
+<<<<<<< group-20/dhruv-harsh-vasu
 # 🚀 DevOps-CA1
 ---
 
@@ -61,3 +62,7 @@ The solution implements fixes and enhancements for better user experience, smoot
 | `@vasudesai11`       | Fixed layout issues in Contact section and implemented CSS marquee for the client logos.        |
 | `@harshkharwar1204`  | Replaced the client carousel with a CSS-based continuous marquee.                               |
 | `@dhruvpatel99269`   | Improved routing structure, integrated `BrowserRouter`, enabled smooth scrolling, and tested all routes.|
+=======
+# Devops-CA1
+Students solutions for their projects submission
+>>>>>>> main
