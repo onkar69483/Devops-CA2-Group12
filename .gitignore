@@ -10,3 +10,24 @@ datasets/
 # Allow specific CSV files
 !train_small.csv
 !test_small.csv
+=======
+# Ignore CSV files
+*.csv
+
+# Ignore data folder
+data/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+.venv/
+env/
+venv/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
