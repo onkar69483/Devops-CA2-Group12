@@ -1,3 +1,16 @@
+venv/
+# Data files
+*.json
+*.xlsx
+*.parquet
+*.pkl
+*.pickle
+data/
+datasets/
+# Allow specific CSV files
+!train_small.csv
+!test_small.csv
+=======
 # Ignore CSV files
 *.csv
 
