@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  fastapi-app:
+    build: .
+    container_name: fastapi-app
+    ports:
+      - "9001:9001"
+    depends_on:
+      - pgvector-db
+      - opensearch
+    environment:
+      DATABASE_URL: "postgresql://test_user:test_password@pgvector-db:5432/test_db"
+      OPENSEARCH_HOST: "http://opensearch:9200"
+    command: ["realtime_va"]
+
+  pgvector-db:
+    image: pgvector/pgvector:0.8.0-pg17
+    container_name: pgvector-db
+    restart: always
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch
+    restart: always
+    environment:
+      discovery.type: "single-node"
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "StrongP@ssw0rd!"
+      DISABLE_SECURITY_PLUGIN: "true"
+    ports:
+      - "9200:9200"
+      - "9600:9600"
