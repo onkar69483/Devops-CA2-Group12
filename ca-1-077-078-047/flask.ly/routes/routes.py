@@ -1,0 +1,125 @@
+from base64 import encode, encodebytes
+from flask import Blueprint
+import sqlalchemy
+import base64
+import time
+import hashlib
+from flask.globals import request
+from werkzeug.utils import redirect
+router = Blueprint("router", __name__)
+
+key_url_mapping = {}
+# a dictionary stores data in the form of key:value
+# Here, the key will store the shortened URL and
+# the value corresponding to it will store the actual URL
+
+click_counter = {}  # key: short_url, value: number of clicks
+
+@router.route('/api/status')
+def status():
+    return "Up and Running ! :)"
+
+@router.route('/api/shorten/quick', methods=['POST'])
+def quickShorten():
+    global key_url_mapping
+    try:
+        url = request.json
+        t = str(time.time())
+        encoded_url = base64.urlsafe_b64encode(url['url'].encode())
+        print(encoded_url)
+        encoded_url = (encoded_url[0:3]+encoded_url[-5:-2]).decode('utf-8')
+        if(encoded_url not in key_url_mapping):
+            key_url_mapping[encoded_url] = url['url']
+        else:
+            if(url['url'] != key_url_mapping[encoded_url]):
+                encoded_url = base64.urlsafe_b64encode((url['url']+t).encode())
+                encoded_url = (encoded_url[0:3]+encoded_url[-5:-2]).decode('utf-8')
+                key_url_mapping[encoded_url] = url['url']
+        return "http://127.0.0.1:5000/{}".format(encoded_url)
+    except Exception as e:
+        print(e)
+        return "Error Occured. Try Later"
+    # return 1;
+
+@router.route('/api/shorten/url', methods=['POST'])
+def shorten():
+    from models import Url
+    Url.create_table()
+
+    try:
+        url = request.json
+        user_url = url['url'].encode('utf-8')
+        existing_url = Url.query.filter_by(original_url=user_url).first()
+        if existing_url:
+            return "http://127.0.0.1:5000/{}".format(existing_url.short_url)
+        else:
+            encoded_url = hashlib.sha1(user_url).hexdigest()
+            record = Url()
+            record.original_url = user_url
+            record.short_url = encoded_url
+            record.save_to_db()
+            return "http://127.0.0.1:5000/{}".format(encoded_url)
+    except Exception as e:
+        raise e
+        return "Error Occured. Try Later"
+
+@router.route('/api/register')
+def register():
+    # Register a User by taking their credentials basically
+    # email id and password and storing them in the user database
+    # After registration, redirect them to the /shorten/custom
+    return 1;
+
+@router.route('/api/clicks/<key>', methods=['GET'])
+def getClickCount(key):
+    global click_counter
+
+    if key in click_counter:
+        return {"short_url": key, "clicks": click_counter[key]}
+    else:
+        return {"short_url": key, "clicks": 0}
+
+
+@router.route('/api/login')
+def login():
+    # Validate a user by taking their email id and password
+    # Check if they match in the user database
+    # If they match: redirect them to the /shorten/custom
+    # Else send them appropriate message accordingly
+    return 1;
+
+@router.route('/api/logout')
+def logout():
+    # Check if a User is logged in
+    # If user is logged in, log them out
+    return 1;
+
+@router.route('/api/shorten/custom')
+def customShorten():
+    # Check whether the user is logged in or not
+    # If the user is not logged in, redirect them to the /login page
+    # else take the input URL to be shortened & the shortened URL they want
+    # Check if the shortened URL is already present in the database
+    # If its not, store the user's input and return their custom URL
+    # Else ask the user to enter any other custom URL and repeat the process
+    return 1;
+
+@router.route('/<key>', methods=['GET'])
+def redirectToActualURL(key):
+    global key_url_mapping, click_counter
+
+    # If key doesn't exist, return 404
+    if key not in key_url_mapping:
+        return "Not Found", 404
+
+    # Increment the click counter
+    if key in click_counter:
+        click_counter[key] += 1
+    else:
+        click_counter[key] = 1
+
+    # Build the actual URL to redirect
+    original_url = key_url_mapping[key]
+    build_url = "https://" + original_url if not original_url.startswith("http") else original_url
+
+    return redirect(build_url)
