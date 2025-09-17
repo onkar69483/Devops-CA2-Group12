@@ -1,0 +1,65 @@
+pipeline {
+    agent { label 'mern_ragbot' }
+
+    environment {
+        COMPOSE_PROJECT_NAME = 'rag_project'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Prepare Wheelhouse') {
+            steps {
+                echo 'Cleaning and preparing wheelhouse...'
+                sh '''
+                    rm -rf wheelhouse
+                    mkdir -p wheelhouse
+                    pip install --upgrade pip
+                    pip download -r requirements.txt -d wheelhouse
+                '''
+            }
+        }
+
+        stage('Cleanup Docker Cache') {
+            steps {
+                echo 'Cleaning unused Docker data...'
+                sh 'docker system prune -a --volumes'
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                echo 'Building Docker images...'
+                sh 'docker-compose build'
+            }
+        }
+
+        stage('Restart Services') {
+            steps {
+                echo 'Restarting containers...'
+                sh '''
+                    docker-compose down
+                    docker-compose up -d
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Post-build logs...'
+            sh 'docker-compose logs || true'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+        success {
+            echo 'Build and deployment successful!'
+        }
+    }
+}

@@ -1,0 +1,1 @@
+kaggle kernels output maheshkharote/fake-or-real-the-impostor-hunt-submission -p /path/to/dest

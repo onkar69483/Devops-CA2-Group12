@@ -1,0 +1,23 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.claude/
+
+CLAUDE.md
+info.md
+blob_pdf/
+parsed_documents/
+pdfs/
+vector_store/
+.env
+repomix-output.xml
+question_logs/
+data/
+resume.tex
