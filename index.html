@@ -1,13 +1,93 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Currency Converter — API Bug vs Fix </title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 28px 14px; background: #f6f7f9; }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 20px; margin: 14px 0; }
+    h1 { font-size: 20px; margin: 0 0 8px; }
+    .desc { color: #444; font-size: 14px; margin-bottom: 12px; }
+    .grid { display: grid; gap: 12px; }
+    .g2 { grid-template-columns: 1fr 1fr; }
+    label { font-size: 12px; color: #444; display:block; margin-bottom: 6px; }
+    input, select { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #d5d8df; border-radius: 10px; outline: none; }
+    input:focus, select:focus { border-color: #7b8cff; box-shadow: 0 0 0 3px rgba(123,140,255,.15); }
+    .resultBox { background:#f1f5f9; border-radius: 10px; padding: 12px; }
+    .title { font-weight: 600; margin-bottom: 6px; }
+    .ok { color:#065f46; }
+    .warn { color:#b45309; }
+    .err { color:#b00020; }
+    code { background:#f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    .footer { font-size: 12px; color:#555; text-align:center; margin-top: 10px; }
+    .row { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 8px; }
+    button { padding: 10px 12px; border: 0; border-radius: 10px; cursor: pointer; background:#0f62fe; color:#fff; }
+    .ghost { background:#eef2f7; color:#1f2a55; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .bar { display:flex; gap:10px; flex-wrap: wrap; align-items:center; }
+    .small { font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Currency Converter — API Bug vs Fix </h1>
+      <div class="desc">Live rates from <strong>api.frankfurter.app</strong> (no API key). Demonstrates the base-currency bug vs the correct cross-rate formula.</div>
+
+      <div class="grid g2">
+        <div>
+          <label>Amount</label>
+          <input id="amount" type="number" step="0.01" placeholder="e.g., 10" />
+        </div>
+        <div></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>From</label>
+          <select id="from"></select>
+        </div>
+        <div style="display:flex; align-items:flex-end; justify-content:center;">
+          <button id="swap" class="ghost" title="Swap From/To">⇄</button>
+        </div>
+        <div>
+          <label>To</label>
+          <select id="to"></select>
+        </div>
+      </div>
+
+      <div class="bar small">
+        <div>API Base (last fetch): <span id="apiBase" class="mono">—</span></div>
+        <div>Timestamp: <span id="ts" class="mono">—</span></div>
+        <button id="refresh" class="ghost">Refresh Rates</button>
+      </div>
+
+      <div class="grid g2">
+        <div class="resultBox">
+          <div class="title warn">Buggy Output</div>
+          <div id="buggyVal" class="mono">—</div>
+          <div class="small">Uses <code>amount × rates[to]</code> (WRONG unless <code>from === API base</code>).</div>
+        </div>
+        <div class="resultBox">
+          <div class="title ok">Fixed Output</div>
+          <div id="fixedVal" class="mono">—</div>
+          <div class="small">Uses <code>amount × (rates[to] / rates[from])</code> (CORRECT cross rate).</div>
+        </div>
+      </div>
+
+      <div class="card small">
+        <div><strong>Instructions</strong>: Pick currencies and amount. If <code>from === API base</code> the two results may match (expected). Try a non-base "from" to see the bug clearly.</div>
+        <div>Reference: <a href="https://www.exchangerate-api.com/docs/pair-conversion-requests" target="_blank" rel="noreferrer">base currency behavior</a></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Built for “bug fix challenge” — no frameworks, vanilla JS.
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
