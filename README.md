@@ -1,3 +1,4 @@
+Devops-CA_Grp16
 # Currency Converter — API Bug vs Fix
 
 ## How to run the project
@@ -11,5 +12,3 @@ This project addresses a common **"Base Currency Assumption"** bug in currency c
 **Problem:**  
 Many implementations assume that the API's **base currency** is the same as the user-selected "From" currency.  
 APIs return rates relative to a fixed base (e.g., USD or EUR). If `fromCurrency ≠ baseCurrency`, directly multiplying:
-```js
-converted = amount * rates[to];
