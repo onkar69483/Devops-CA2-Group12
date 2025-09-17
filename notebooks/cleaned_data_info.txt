@@ -1,0 +1,37 @@
+1. missing values (e.g., PoolQC, Alley, Fence, FireplaceQu, GarageType, GarageYrBlt, etc.) handled by:
+  - categorical features were filled with "None"
+  - Numerical features were filled with 0 (example: GarageArea, GarageCars, MasVnrArea, BsmtFinSF1 → NA became 0)
+  - LotFrontage: missing values were filled by the median LotFrontage within each Neighborhood, so missing frontage estimates are more accurate for the local area.
+  - dropped the Utilities column entirely.
+
+2. ordinal encoding for quality ratings: columns representing quality on an ordinal scale were mapped to numeric features
+    Original categories: "Ex"=Excellent, "Gd"=Good, "TA"=Typical, "Fa"=Fair, "Po"=Poor, "None"=No feature.
+    Mapping: {Ex:5, Gd:4, TA:3, Fa:2, Po:1, None:0}.
+
+    Example:
+    KitchenQual: Gd → 4
+    FireplaceQu: NA → None → 0
+
+3. Label encoding or ordinal-like categories: columns were ordered but non-numeric categories were label-encoded to integer labels using LabelEncoder.
+
+4. applied one-hot encoding which converted all remaining categorical columns into one-hot encoded dummy variables which become compatible with ML models.
+
+5. combined train and test features into one DataFrame for consistent preprocessing and save
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example Before → After
+
+Before (raw):
+KitchenQual: Gd (string)
+FireplaceQu: NA (missing)
+MSZoning: RL (string)
+Neighborhood: CollgCr (string)
+LotFrontage: NA
+
+After (cleaned):
+KitchenQual: 4 (numeric)
+FireplaceQu: 0 (None mapped)
+MSZoning_RL: 1 (dummy variable)
+Neighborhood_CollgCr: 1 (dummy variable)
+LotFrontage: filled with neighborhood median
