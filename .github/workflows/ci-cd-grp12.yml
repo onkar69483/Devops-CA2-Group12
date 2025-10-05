@@ -3,34 +3,42 @@ name: AKS Deployment
 on:
   push:
     branches:
-      - main  # or master, your default branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Login to Azure
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build Docker image
-      run: |
-        docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:latest .
+      # Set AKS context
+      - name: Set AKS context
+        run: |
+          az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
 
-    - name: Push Docker image to ACR
-      run: |
-        docker push wealthwiseregistry.azurecr.io/wealthwise-backend:latest
+      # Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:latest ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend
 
-    - name: Set AKS context
-      run: |
-        az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
+      # Push Docker image to ACR
+      - name: Push Docker image
+        run: |
+          docker push wealthwiseregistry.azurecr.io/wealthwise-backend:latest
 
-    - name: Deploy to AKS
-      run: |
-        kubectl apply -f k8s/deployment.yaml
-        kubectl apply -f k8s/service.yaml
+      # Deploy to AKS
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
+          kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/service.yaml
+          # Wait for deployment to finish
+          kubectl rollout status deployment/wealthwise-backend
