@@ -17,3 +17,4 @@ yfinance
 pandas
 numpy
 scikit-learn
+gunicorn
