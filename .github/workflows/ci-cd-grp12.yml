@@ -30,19 +30,23 @@ jobs:
         run: |
           az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
 
-      # Build Docker image (context = backend folder)
+      # Generate image tag based on commit SHA
+      - name: Set image tag
+        id: vars
+        run: echo "IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+      # Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:latest ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend
+          docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }} ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend
 
       # Push Docker image to ACR
       - name: Push Docker image
         run: |
-          docker push wealthwiseregistry.azurecr.io/wealthwise-backend:latest
+          docker push wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}
 
-      # Deploy to AKS
+      # Update deployment with new image
       - name: Deploy to AKS
         run: |
-          kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
-          kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/service.yaml
+          kubectl set image deployment/wealthwise-backend wealthwise-backend=wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}
           kubectl rollout status deployment/wealthwise-backend
