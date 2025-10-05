@@ -20,6 +20,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Login to ACR
+      - name: Login to ACR
+        run: |
+          az acr login --name wealthwiseregistry
+
       # Set AKS context
       - name: Set AKS context
         run: |
