@@ -48,5 +48,5 @@ jobs:
       # Update deployment with new image
       - name: Deploy to AKS
         run: |
-          kubectl set image deployment/wealthwise-backend wealthwise-backend=wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}
+          kubectl set image deployment/wealthwise-backend backend=wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}
           kubectl rollout status deployment/wealthwise-backend
