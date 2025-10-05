@@ -22,35 +22,21 @@ jobs:
 
       # Login to ACR
       - name: Login to ACR
-        run: |
-          az acr login --name wealthwiseregistry
+        run: az acr login --name wealthwiseregistry
 
       # Set AKS context
       - name: Set AKS context
-        run: |
-          az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
+        run: az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
 
-      # Generate image tag based on commit SHA
-      - name: Set image tag
-        id: vars
-        run: echo "IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
-      # Build Docker image
+      # Build Docker image with 'latest' tag
       - name: Build Docker image
-        run: |
-          docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }} ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend
+        run: docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:latest ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend
 
       # Push Docker image to ACR
       - name: Push Docker image
-        run: |
-          docker push wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}
+        run: docker push wealthwiseregistry.azurecr.io/wealthwise-backend:latest
 
-      # Update deployment.yaml with new image tag dynamically
-      - name: Update deployment.yaml image
-        run: |
-          sed -i "s|image: wealthwiseregistry.azurecr.io/wealthwise-backend:.*|image: wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}|" ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
-
-      # Apply deployment (ensures secrets/env vars are applied)
+      # Apply deployment (uses 'latest' image)
       - name: Apply deployment
         run: |
           kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
