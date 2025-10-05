@@ -48,10 +48,10 @@ jobs:
       # Update deployment.yaml with new image tag dynamically
       - name: Update deployment.yaml image
         run: |
-          sed -i "s|image: wealthwiseregistry.azurecr.io/wealthwise-backend:.*|image: wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}|" ./WealthWise-Group12-CA2-Group12/backend/deployment.yaml
+          sed -i "s|image: wealthwiseregistry.azurecr.io/wealthwise-backend:.*|image: wealthwiseregistry.azurecr.io/wealthwise-backend:${{ env.IMAGE_TAG }}|" ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
 
       # Apply deployment (ensures secrets/env vars are applied)
       - name: Apply deployment
         run: |
-          kubectl apply -f ./WealthWise-Group12-CA2-Group12/backend/deployment.yaml
+          kubectl apply -f ./WealthWise-Group12-CA2-PRN-086-119-120-135/backend/k8s/deployment.yaml
           kubectl rollout status deployment/wealthwise-backend
