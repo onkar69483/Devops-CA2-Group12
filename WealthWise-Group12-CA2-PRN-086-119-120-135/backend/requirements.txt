@@ -18,3 +18,4 @@ pandas
 numpy
 scikit-learn
 gunicorn
+django-prometheus

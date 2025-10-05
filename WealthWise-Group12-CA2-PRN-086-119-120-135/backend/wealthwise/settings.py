@@ -47,9 +47,14 @@ INSTALLED_APPS = [
     "users",
     "financial_data",
     "chatbot",
+    # Prometheus monitoring
+    "django_prometheus",
 ]
 
 MIDDLEWARE = [
+    # Prometheus before middleware
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -59,6 +64,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+    # Prometheus after middleware
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "wealthwise.urls"

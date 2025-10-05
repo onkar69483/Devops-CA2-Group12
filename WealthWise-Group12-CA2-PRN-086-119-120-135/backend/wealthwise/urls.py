@@ -26,4 +26,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("api/auth/", include("users.urls")),
     path("api/financial/", include("financial_data.urls")),
+    
+    # Prometheus metrics endpoint
+    path('', include('django_prometheus.urls')),
 ]
