@@ -1,0 +1,36 @@
+name: AKS Deployment
+
+on:
+  push:
+    branches:
+      - main  # or master, your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t wealthwiseregistry.azurecr.io/wealthwise-backend:latest .
+
+    - name: Push Docker image to ACR
+      run: |
+        docker push wealthwiseregistry.azurecr.io/wealthwise-backend:latest
+
+    - name: Set AKS context
+      run: |
+        az aks get-credentials --resource-group devopsca2 --name wealthwise-cluster
+
+    - name: Deploy to AKS
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
