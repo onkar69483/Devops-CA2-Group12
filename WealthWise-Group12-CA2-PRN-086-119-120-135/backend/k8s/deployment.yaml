@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wealthwise-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wealthwise-backend
+  template:
+    metadata:
+      labels:
+        app: wealthwise-backend
+    spec:
+      containers:
+      - name: backend
+        image: wealthwiseregistry.azurecr.io/wealthwise-backend:latest
+        ports:
+        - containerPort: 8000
